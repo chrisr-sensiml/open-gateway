@@ -48,11 +48,10 @@ const Record = (props) => {
   console.log("Connected Camera");
   console.log(props.isCameraConnected);
 
-
   const handleRecordRequest = (event, url, setRecording, filename) => {
     setRecordDistabled(true);
     console.log(event);
-  
+
     if (filename === "") {
       filename = "test";
     }
@@ -75,7 +74,7 @@ const Record = (props) => {
         setRecordDistabled(false);
       });
   };
-  
+
   const handleDownloadRequest = (event, filename) => {
     console.log(`${process.env.REACT_APP_API_URL}download/` + filename);
     fetch(`${process.env.REACT_APP_API_URL}download/` + filename, {
@@ -89,13 +88,13 @@ const Record = (props) => {
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", filename + ".zip");
-  
+
         // Append to html link element page
         document.body.appendChild(link);
-  
+
         // Start download
         link.click();
-  
+
         // Clean up and remove the link
         link.parentNode.removeChild(link);
       });
@@ -116,84 +115,80 @@ const Record = (props) => {
         <div className={classes.section2}>
           <Typography variant="subtitle1" color="textSecondary"></Typography>
         </div>
-        <Card>
-          <CardContent>
-            <Grid container columns spacing={6}>
-              <Grid item xs={12}>
-                <TextField
-                  id="outlined-basic"
-                  variant="outlined"
-                  value={filename}
-                  onChange={handleFileNameChange}
-                  fullWidth={true}
-                  disabled={recording}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                {recording === false ? (
-                  <Tooltip
-                    title="This will record the device sensor data in .csv format to the gateway.
+        <Grid container columns spacing={6}>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              value={filename}
+              onChange={handleFileNameChange}
+              fullWidth={true}
+              disabled={recording}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {recording === false ? (
+              <Tooltip
+                title="This will record the device sensor data in .csv format to the gateway.
                   If video source is connected, the video source will also be recorded.
                   "
-                    aria-label="record"
-                  >
-                    <Button
-                      aria-label="Record"
-                      variant="contained"
-                      fullWidth={true}
-                      disabled={recordDistabled}
-                      onClick={() => {
-                        handleRecordRequest(
-                          "record-start",
-                          props.isCameraConnected ? "record" : "record-device",
-                          setRecording,
-                          filename
-                        );
-                      }}
-                    >
-                      Record
-                    </Button>
-                  </Tooltip>
-                ) : (
-                  <Button
-                    aria-label="Stop "
-                    variant="contained"
-                    fullWidth={true}
-                    disabled={recordDistabled}
-                    onClick={() => {
-                      handleRecordRequest(
-                        "record-stop",
-                        props.isCameraConnected ? "record" : "record-device",
-                        setRecording
-                      );
-                    }}
-                  >
-                    Stop Recording
-                  </Button>
-                )}
-              </Grid>
-
-              <Grid item xs={6}>
-                <Tooltip
-                  title="Download the recorded .csv and .mp4 for this capture from the gateway. A .dcli file will also be generated describing the data.
-                  "
-                  aria-label="record"
+                aria-label="record"
+              >
+                <Button
+                  aria-label="Record"
+                  variant="contained"
+                  fullWidth={true}
+                  disabled={recordDistabled}
+                  onClick={() => {
+                    handleRecordRequest(
+                      "record-start",
+                      props.isCameraConnected ? "record" : "record-device",
+                      setRecording,
+                      filename
+                    );
+                  }}
                 >
-                  <Button
-                    aria-label="Download "
-                    variant="contained"
-                    fullWidth={true}
-                    onClick={() => {
-                      handleDownloadRequest("download", filename);
-                    }}
-                  >
-                    Download
-                  </Button>
-                </Tooltip>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+                  Record
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                aria-label="Stop "
+                variant="contained"
+                fullWidth={true}
+                disabled={recordDistabled}
+                onClick={() => {
+                  handleRecordRequest(
+                    "record-stop",
+                    props.isCameraConnected ? "record" : "record-device",
+                    setRecording
+                  );
+                }}
+              >
+                Stop Recording
+              </Button>
+            )}
+          </Grid>
+
+          <Grid item xs={6}>
+            <Tooltip
+              title="Download the recorded .csv and .mp4 for this capture from the gateway. A .dcli file will also be generated describing the data.
+                  "
+              aria-label="record"
+            >
+              <Button
+                aria-label="Download "
+                variant="contained"
+                fullWidth={true}
+                onClick={() => {
+                  handleDownloadRequest("download", filename);
+                }}
+              >
+                Download
+              </Button>
+            </Tooltip>
+          </Grid>
+        </Grid>
       </CardContent>
     </Card>
   );

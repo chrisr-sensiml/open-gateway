@@ -44,7 +44,7 @@ setup(
         "mss",
         "numpy",
         "nest_asyncio",
-        "bleak,
+        "bleak",
         "bluepy ; sys_platform == 'linux'",
     ],
 )

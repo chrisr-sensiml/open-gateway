@@ -86,14 +86,13 @@ const WebCamera = (props) => {
             Video Source
           </Typography>
         </div>
+        <div className={classes.section2}>
+          <Divider variant="middle" />
+        </div>
         <Camera
           cameraKey={cameraKey}
           cameraView={props.isCameraConnected}
         ></Camera>
-        <Divider variant="middle" />
-        <div className={classes.section2}>
-          <Typography variant="subtitle1" color="textSecondary"></Typography>
-        </div>
 
         <div className={classes.details}>
           <Grid container rows spacing={2}>

@@ -1,0 +1,12 @@
+CONFIG_SAMPLES_PER_PACKET = 1
+SECRET_KEY = "any secret string"
+CONFIG_SAMPLE_RATE = None
+SOURCE_SAMPLES_PER_PACKET = None
+DATA_SOURCE = None
+CONFIG_COLUMNS = []
+DEVICE_ID = None
+DEVICE_SOURCE = None
+MODE = ""
+BAUD_RATE = 460800
+CLASS_MAP = {65534: "Classification Limit Reached", 0: "Unknown"}
+VIDEO_SOURCE = None

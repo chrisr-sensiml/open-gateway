@@ -25,13 +25,13 @@ setup(
     author="Chris Knorowski",
     author_email="chris.knorowski@sensiml.com",
     url="https://github.com/sensiml/mikopa",
-    license="MIT",
+    license="BSD-3",
     classifiers=[
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=find_packages(exclude=["*test*"]),
+    packages=find_packages(exclude=["*test*", "mikopa_ui*"]),
     include_package_data=True,
     long_description=open("README.md").read(),
     install_requires=[
@@ -44,7 +44,7 @@ setup(
         "mss",
         "numpy",
         "nest_asyncio",
-        "bleak ; sys_platform == 'win32'",
+        "bleak,
         "bluepy ; sys_platform == 'linux'",
     ],
 )

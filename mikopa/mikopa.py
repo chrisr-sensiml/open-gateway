@@ -1,9 +1,3 @@
-"""
-This script runs the application using a development server.
-It contains the definition of routes and views for the application.
-"""
-
-
 import os
 import json
 import sys
@@ -37,36 +31,26 @@ import zipfile
 
 
 app = Flask(__name__, static_folder="../mikopa_ui/build", static_url_path="/")
+
 app.register_blueprint(errors)
 CORS(app, resources={r"/*": {"origins": "*"}})
 loop = asyncio.get_event_loop()
-
-app.config["CONFIG_SAMPLES_PER_PACKET"] = 1
-app.config["SECRET_KEY"] = "any secret string"
-app.config["CONFIG_SAMPLE_RATE"] = None
-app.config["SOURCE_SAMPLES_PER_PACKET"] = None
-app.config["DATA_SOURCE"] = None
-app.config["CONFIG_COLUMNS"] = []
-app.config["DEVICE_ID"] = None
-app.config["DEVICE_SOURCE"] = None
-app.config["MODE"] = ""
-app.config["BAUD_RATE"] = 460800
-app.config["CLASS_MAP"] = {65534: "Classification Limit Reached", 0: "Unknown"}
-app.config["VIDEO_SOURCE"] = None
 app.config["LOOP"] = loop
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
 
+app.config.from_object("settings")
+
 
 def cache_config(config):
     tmp = {
-        "CONFIG_SAMPLE_RATE": app.config["CONFIG_SAMPLE_RATE"],
-        "DATA_SOURCE": app.config["DATA_SOURCE"],
-        "CONFIG_COLUMNS": app.config["CONFIG_COLUMNS"],
-        "DEVICE_ID": app.config["DEVICE_ID"],
-        "MODE": app.config["MODE"],
-        "SOURCE_SAMPLES_PER_PACKET": app.config["SOURCE_SAMPLES_PER_PACKET"],
+        "CONFIG_SAMPLE_RATE": config["CONFIG_SAMPLE_RATE"],
+        "DATA_SOURCE": config["DATA_SOURCE"],
+        "CONFIG_COLUMNS": config["CONFIG_COLUMNS"],
+        "DEVICE_ID": config["DEVICE_ID"],
+        "MODE": config["MODE"],
+        "SOURCE_SAMPLES_PER_PACKET": config["SOURCE_SAMPLES_PER_PACKET"],
     }
     json.dump(tmp, open("./.config.cache", "w"))
 
@@ -604,6 +588,8 @@ def delete_cache():
 if __name__ == "__main__":
 
     HOST = os.environ.get("SERVER_HOST", "localhost")
+    CACHE = os.environ.get("DATA_DIR", "./")
+    DATA_DIR = os.path.join(CACHE)
     try:
         PORT = int(os.environ.get("SERVER_PORT", "5555"))
     except ValueError:
@@ -625,4 +611,3 @@ if __name__ == "__main__":
                 time.sleep(1)
         print("Shutting down server!")
         sys.exit()
-

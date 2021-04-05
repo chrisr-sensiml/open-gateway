@@ -278,6 +278,18 @@ def config_video():
         if event_type == "camera-on":
 
             if app.config["VIDEO_SOURCE"]:
+                camera_info = app.config["VIDEO_SOURCE"].info()
+
+                if camera_info["camera_index"] != camera_index:
+                    return make_response(
+                        jsonify(
+                            detail="Camera: {}, Index: {} already connected. Only a single camera can be connected at a time.".format(
+                                camera_info["camera_index"], camera_info["camera_name"]
+                            )
+                        ),
+                        400,
+                    )
+
                 return make_response(jsonify(detail="Camera already on"), 200)
 
             app.config["VIDEO_SOURCE"] = get_video_source(camera_index)

@@ -109,9 +109,19 @@ class SerialResultReader(SerialReader, BaseResultReaderMixin):
         self._flush_buffer()
 
         self.streaming = True
-        while self.streaming:
-            data = self._read_line()
-            self.rbuffer.update_buffer([data])
+        with serial.Serial(self.port, self.baud_rate, timeout=1) as ser:
+
+            while self.streaming:
+                value = ser.readline()
+                try:
+                    value = value.decode("ascii")
+                except:
+                    value = None
+
+                if value:
+                    self.rbuffer.update_buffer([value])
+
+                time.sleep(0.001)
 
 
 if __name__ == "__main__":

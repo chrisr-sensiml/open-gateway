@@ -231,6 +231,18 @@ class BaseReader(object):
         return True
 
 
+def convert_data_to_int(data):
+
+    num_samples = len(data) / 4
+
+    tmp = struct.unpack("f" * num_samples, data)
+
+    sample_data = bytearray(num_samples * 2)
+
+    for index in range(num_samples):
+        struct.pack_into("<" + "h", sample_data, index * 2, int(tmp[index] * 100))
+
+
 class BaseStreamReaderMixin(object):
     def read_data(self):
         """ Generator to read the data stream out of the buffer """
@@ -256,6 +268,9 @@ class BaseStreamReaderMixin(object):
 
             if self.buffer.is_buffer_full(index):
                 data = self.buffer.read_buffer(index)
+
+                data = convert_data_to_int(data)
+
                 index = self.buffer.get_next_index(index)
 
                 if data:

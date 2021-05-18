@@ -233,14 +233,17 @@ class BaseReader(object):
 
 def convert_data_to_int(data):
 
-    num_samples = len(data) / 4
+    num_samples = len(data) // 4
 
     tmp = struct.unpack("f" * num_samples, data)
 
     sample_data = bytearray(num_samples * 2)
 
     for index in range(num_samples):
+        # print(tmp[index])
         struct.pack_into("<" + "h", sample_data, index * 2, int(tmp[index] * 100))
+
+    return bytes(sample_data)
 
 
 class BaseStreamReaderMixin(object):

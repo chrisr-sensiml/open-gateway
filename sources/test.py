@@ -34,7 +34,8 @@ class TestReader(BaseReader):
         x = list(range(0, fs))  # the points on the x axis for plotting
 
         data = [
-            [1000 * offset + xs - 32767 for xs in x] for offset in range(0, num_columns)
+            [self.data_type_cast((1000 * offset + xs - 32767)) / 100 for xs in x]
+            for offset in range(0, num_columns)
         ]
 
         sample_data = bytearray(num_columns * len(x) * self.data_byte_size)

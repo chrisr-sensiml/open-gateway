@@ -48,8 +48,11 @@ class TestStreamReader(TestReader, BaseStreamReaderMixin):
         x = list(range(0, fs))  # the points on the x axis for plotting
 
         data = [
-            [1000 * offset + xs - 32767 for xs in x] for offset in range(0, num_columns)
+            [self.data_type_cast(1000 * offset + xs - 32767) / 1000 for xs in x]
+            for offset in range(0, num_columns)
         ]
+
+        print(self.data_type_str)
 
         sample_data = bytearray(num_columns * len(x) * self.data_byte_size)
         for index in x:
@@ -158,7 +161,7 @@ def get_test_device_configs(device_id):
         }
         config["sample_rate"] = 119
         config["samples_per_packet"] = 6
-        config["data_type"] = "float32"
+        config["data_type"] = "float"
 
     elif device_id == "Test IMU 6-axis":
         config["column_location"] = {

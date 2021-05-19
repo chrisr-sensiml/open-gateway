@@ -52,7 +52,7 @@ class BaseReader(object):
 
         if self.data_type == "int16":
             return INT16_BYTE_SIZE
-        elif self.data_type == "float32":
+        elif self.data_type == "float":
             return FLOAT32_BYTE_SIZE
 
         return INT16_BYTE_SIZE
@@ -61,7 +61,7 @@ class BaseReader(object):
     def data_type_str(self):
         if self.data_type == "int16":
             return "h"
-        elif self.data_type == "float32":
+        elif self.data_type == "float":
             return "f"
 
         return INT16_BYTE_SIZE
@@ -70,7 +70,7 @@ class BaseReader(object):
     def data_type_cast(self):
         if self.data_type == "int16":
             return int
-        elif self.data_type == "float32":
+        elif self.data_type == "float":
             return float
 
         return int
@@ -300,7 +300,7 @@ class BaseStreamReaderMixin(object):
                             ret = -1
                             number_samples_run = 0
 
-                convert_data_to_int(data)
+                data = convert_data_to_int(data)
 
                 if data:
                     yield data

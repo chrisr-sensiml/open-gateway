@@ -45,18 +45,18 @@ const Main = () => {
     setStreamingSource(data.source.toUpperCase());
     setDeviceID(data.device_id);
     setIsCameraConnected(data.camera_on);
-    
-    switch (data.data_type){
-      case('int16'):
+
+    switch (data.data_type) {
+      case ('int16'):
         setDataType('int16');
         break;
-      case('float32'):
-        setDataType('float32');
+      case ('float'):
+        setDataType('float');
         break;
       default:
         setDataType('int16');
     }
-    
+
     data.column_location =
       "column_location" in data
         ? Object.keys(data.column_location).sort().join(", ")

@@ -242,6 +242,21 @@ class BaseReader(object):
             yield tmp[index * self.data_width : (index + 1) * self.data_width]
 
 
+def convert_data_to_int(data):
+
+    num_samples = len(data) // 4
+
+    tmp = struct.unpack("f" * num_samples, data)
+
+    sample_data = bytearray(num_samples * 2)
+
+    for index in range(num_samples):
+        # print(tmp[index])
+        struct.pack_into("<" + "h", sample_data, index * 2, int(tmp[index] * 100))
+
+    return bytes(sample_data)
+
+
 class BaseStreamReaderMixin(object):
     def read_data(self):
         """ Generator to read the data stream out of the buffer """
@@ -284,6 +299,9 @@ class BaseStreamReaderMixin(object):
                             sml.reset_model(0)
                             ret = -1
                             number_samples_run = 0
+
+                convert_data_to_int(data)
+
                 if data:
                     yield data
 

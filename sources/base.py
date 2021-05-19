@@ -36,6 +36,8 @@ class BaseReader(object):
         self.buffer = None
         self.rbuffer = None
         self._lock = threading.Lock()
+        self.convert_to_int16 = config.get("CONVERT_TO_INT16", False)
+        self.scaling_factor = config.get("SCALING_FACTOR", 1)
 
     @property
     def data_width(self):
@@ -241,20 +243,23 @@ class BaseReader(object):
         for index in range(self.source_samples_per_packet):
             yield tmp[index * self.data_width : (index + 1) * self.data_width]
 
+    def convert_data_to_int16(self, data):
+        scaling_factor = 100
 
-def convert_data_to_int(data):
+        num_samples = len(data) // self.data_byte_size
 
-    num_samples = len(data) // 4
+        tmp = struct.unpack(self.data_type_str * num_samples, data)
 
-    tmp = struct.unpack("f" * num_samples, data)
+        sample_data = bytearray(num_samples * 2)
 
-    sample_data = bytearray(num_samples * 2)
+        for index in range(num_samples):
+            # print(tmp[index])
 
-    for index in range(num_samples):
-        # print(tmp[index])
-        struct.pack_into("<" + "h", sample_data, index * 2, int(tmp[index] * 100))
+            struct.pack_into(
+                "<" + "h", sample_data, index * 2, int(tmp[index] * scaling_factor)
+            )
 
-    return bytes(sample_data)
+        return bytes(sample_data)
 
 
 class BaseStreamReaderMixin(object):
@@ -300,7 +305,8 @@ class BaseStreamReaderMixin(object):
                             ret = -1
                             number_samples_run = 0
 
-                data = convert_data_to_int(data)
+                if self.convert_to_int16 and self.data_type_str == "f":
+                    data = self.convert_data_to_int16(data)
 
                 if data:
                     yield data

@@ -62,6 +62,10 @@ app.config["CONFIG_SAMPLES_PER_PACKET"] = 1
 app.config["SML_LIBRARY_PATH"] = ""
 
 
+# settings to scale incoming data by
+app.config["CONVERT_TO_INT16"] = False
+app.config["SCALING_FACTOR"] = 1
+
 ###############################
 
 

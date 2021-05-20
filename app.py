@@ -59,11 +59,18 @@ app.config["MODEL_JSON"] = None
 app.config["CONFIG_SAMPLES_PER_PACKET"] = 1
 
 # path to a libsensiml.so file if this is included the model will be run when live streaming data.
-app.config["SML_LIBRARY_PATH"] = ""
+app.config["SML_LIBRARY_PATH"] = os.path.join(
+    os.path.dirname(__file__), "knowledgepack", "libsensiml"
+)
+app.config["RUN_SML_MODEL"] = (
+    True
+    if os.path.exists(os.path.join(app.config["SML_LIBRARY_PATH"], "libsensiml.so"))
+    else False
+)
 
 
 # settings to scale incoming data by
-app.config["CONVERT_TO_INT16"] = False
+app.config["CONVERT_TO_INT16"] = True
 app.config["SCALING_FACTOR"] = 1
 
 ###############################

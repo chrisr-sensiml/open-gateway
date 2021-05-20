@@ -94,12 +94,9 @@ ar -x libsensiml.a
 gcc -shared -o libsensiml.so *.o
 ```
 
-Then update the app.py configuration file to point to the path folder containing the libsensiml.so file.
+Then copy the libsensiml.so file into the open-gateway/knowledgepack/libsensiml folder. 
 
-```python
-# path to a libsensiml.so file if this is included the model will be run when live streaming data.
-app.config["SML_LIBRARY_PATH"] = "<path-to-the-folder-containing-libsensiml.so>"
-```
+The gateway will automatically load this file and run it when you are streaming data. To disable this behavior either remove the .so file or set the app.config["RUN_SML_MODEL"] = False
 
 Now connect to your device in data collection mode, switch to the Test Mode tab and click start stream. In the terminal window running the open gateway you will see the model results printed. In the webui you will see the data streaming.
 
